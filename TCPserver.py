@@ -22,30 +22,27 @@ def chat():
     soc = cn
     dirc = soc.recv(1024).decode()    
     nombre = "C:/Users/ragm1_000/Downloads/" + dirc
-    print(nombre)
     f = open(nombre, "wb")
     soc.send("ok".encode())
-    print(" "+nombre)
     while True:
         #Recibimos el mensaje, con el metodo recv recibimos datos y como parametro 
         #la cantidad de bytes para recibir
         recibido = soc.recv(1024)       
         if len(recibido)==1:
-            print("==1"+recibido.decode())
             if recibido.decode() == "z":
-                print("sale z")
                 break
         f.write(recibido)
         #Devolvemos el mensaje al cliente
         soc.send("ok".encode())
-        print("dice OK")
 
-    print("salio")
-    f.close()    
+    print("recibio archivo")
+    f.close()
 
+    time.sleep(10)
+    
     #llamar script conv.py
     split = dirc.split(".")
-    convert = "/tmp/"+split[0]+".mp4"
+    convert = "C:/Users/ragm1_000/Downloads/"+split[0]+".mp4"
     os.system('python conv.py '+nombre+" "+convert)
     print("iniciar envio")
 
@@ -54,7 +51,7 @@ def chat():
     soc.recv(4).decode()
     for linea in fn:
         soc.send(linea)
-        print(soc.recv(4).decode())
+        soc.recv(4).decode()
     fn.close()
     soc.send("z".encode())
     
